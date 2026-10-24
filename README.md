@@ -1,5 +1,7 @@
 # Dor de Cotovelo
 
+> **Projeto guardado em 24/10/2026.** O app está pausado na Vercel e fora da vitrine e da LÚCIDA. Antes de retomar, leia [docs/RETOMADA.md](docs/RETOMADA.md): ele traz o que foi desligado, o que Sol pediu para a próxima versão e as pendências de segurança obrigatórias.
+
 App de apoio para quem está sofrendo por alguém: término, rejeição, paixão não correspondida, dependência emocional percebida ou idas e vindas. Ecossistema Relacione-se, por Sol Lima.
 
 > A dor merece acolhimento, mas não precisa comandar as decisões.
@@ -20,6 +22,7 @@ O app não promete reconciliação, não ensina a reconquistar e não diagnostic
 
 | Documento | Para quê |
 |---|---|
+| [docs/RETOMADA.md](docs/RETOMADA.md) | Por que o projeto foi guardado, como religar e o que fazer antes de voltar ao ar. |
 | [docs/MANUAL-DO-PRODUTO.md](docs/MANUAL-DO-PRODUTO.md) | Para que serve, como cada área funciona, como a pessoa usa e como apresentar. |
 | [docs/IMPLEMENTACAO-MVP-v1.md](docs/IMPLEMENTACAO-MVP-v1.md) | Arquitetura, contratos de dados, conselheira, critérios de aceitação com evidências, limitações e decisões pendentes. |
 | [docs/AUDITORIA-FASE-0.md](docs/AUDITORIA-FASE-0.md) | O que existia antes, o que faltava e as decisões técnicas que vieram daí. |
