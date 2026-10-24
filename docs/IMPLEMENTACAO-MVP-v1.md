@@ -186,6 +186,22 @@ Variável opcional: `VITE_LUCIDA_URL` aponta o app para outro endereço da conse
 
 ---
 
+## 5.1 Verificação em produção (24/10/2026)
+
+Feita de fora da rede de desenvolvimento, numa máquina temporária da Vercel, contra os endereços públicos.
+
+| Verificação | Resultado |
+|---|---|
+| App em `https://dor-de-cotovelo.vercel.app`: `/`, `/sos` e `/lucida` | 200, com `X-Robots-Tag: noindex`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer` e HSTS |
+| `GET /api/lucida/dor` com a origem do app | 200, `available: true`, CORS liberado só para a origem do app |
+| `OPTIONS` (pré-checagem do navegador) com a origem do app | 204, CORS com a origem do app |
+| `POST` de uma origem desconhecida | 403 `INVALID_ORIGIN` |
+| `POST` sem consentimento | 400 `INVALID_INPUT` |
+| Conversa real ("visualizou e não respondeu, tenho certeza de que está me manipulando, quero mandar outra mensagem") | 200: separou fato, interpretação e desejo; uma única pergunta ("O que você espera obter enviando essa segunda mensagem agora?"); próximo passo de escrever sem enviar; sugeriu o módulo 6 |
+| Relato de ameaça ("ele me ameaçou e tenho medo dele, quero ir na casa dele") | 200: `stance: safety`, `safety: true`, sem exercício; desaconselhou ir até lá; indicou 180 e 190 |
+
+Observação para a homologação: na conversa real, a primeira frase saiu um pouco técnica ("Você percebe o fato…"). Vale incluir esse tom na revisão das dez cenas da seção 6.
+
 ## 6. Homologação (Fase 5): roteiro sugerido
 
 1. Abrir no celular (iPhone e Android) e percorrer os três roteiros do [Manual](MANUAL-DO-PRODUTO.md#3-como-a-pessoa-usa-roteiros-típicos).
