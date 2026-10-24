@@ -1,47 +1,51 @@
 # Dor de Cotovelo
 
-Projeto de funis, criativos e produtos digitais para pessoas em sofrimento afetivo, com foco inicial em mulheres que suspeitam de traição e desejam recuperar clareza emocional.
+App de apoio para quem está sofrendo por alguém: término, rejeição, paixão não correspondida, dependência emocional percebida ou idas e vindas. Ecossistema Relacione-se, por Sol Lima.
 
-## Objetivo imediato
+> A dor merece acolhimento, mas não precisa comandar as decisões.
 
-Validar um funil extremamente simples:
+O app não promete reconciliação, não ensina a reconquistar e não diagnostica. Ele ajuda a pessoa a recuperar autonomia, discernimento e capacidade de escolha.
 
-```text
-Criativo → teste gratuito → bloqueio do resultado → pagamento de R$ 9,90 → resultado personalizado
+## O que tem dentro
+
+- **Meu Momento:** o que está doendo, cinco perguntas curtas e um ponto de partida explicado.
+- **Minha Jornada:** oito módulos com exercícios, no ritmo da pessoa, sem prazo.
+- **SOS Emocional:** para os minutos de impulso, com triagem de perigo, acolhida, termômetro da urgência, pausa de respiração e uma escolha pequena e segura.
+- **Mensagem que não envio:** escrever tudo sem mandar.
+- **Converse com a LÚCIDA:** conselheira de IA que separa fato, interpretação e esperança. Exige consentimento e não faz ofertas.
+- **Meu Progresso:** percepções registradas pela própria pessoa, sem nota de cura, e o plano para os dias difíceis.
+- **Privacidade:** tudo fica só no aparelho, com opções de não guardar, baixar uma cópia ou apagar tudo.
+
+## Documentação
+
+| Documento | Para quê |
+|---|---|
+| [docs/MANUAL-DO-PRODUTO.md](docs/MANUAL-DO-PRODUTO.md) | Para que serve, como cada área funciona, como a pessoa usa e como apresentar. |
+| [docs/IMPLEMENTACAO-MVP-v1.md](docs/IMPLEMENTACAO-MVP-v1.md) | Arquitetura, contratos de dados, conselheira, critérios de aceitação com evidências, limitações e decisões pendentes. |
+| [docs/AUDITORIA-FASE-0.md](docs/AUDITORIA-FASE-0.md) | O que existia antes, o que faltava e as decisões técnicas que vieram daí. |
+| [docs/ESPECIFICACAO-v1.0.md](docs/ESPECIFICACAO-v1.0.md) | Especificação funcional original. |
+| [docs/historico-funil-mapa-da-suspeita/](docs/historico-funil-mapa-da-suspeita/) | Estratégia anterior deste repositório: o funil "Mapa da Suspeita", que hoje vive na vitrine como ferramenta gratuita. |
+
+## Rodar
+
+```bash
+npm install
+npm run dev      # desenvolvimento
+npm test         # testes de lógica
+npm run build    # tipos + build de produção (dist/)
 ```
 
-A promessa comercial não é provar uma traição, invadir aparelhos ou rastrear alguém. O produto entrega uma leitura educativa de padrão percebido, orientação inicial e um próximo passo prático.
+Percurso completo no navegador: `npm run preview -- --port 5300` e, em outro terminal, `node scripts/e2e.mjs capturas`.
 
-## Hipótese do MVP
-
-A usuária entra querendo descobrir algo sobre o parceiro. Ela paga um valor baixo para ver a leitura do teste. O resultado entrega alívio, organiza a percepção e abre caminho para produtos posteriores de maior profundidade.
-
-## Estrutura do repositório
-
-- `docs/PROJETO-MESTRE.md`: visão estratégica completa, persona, mecanismos, ética e expansão.
-- `docs/MVP-TESTE-PAGO.md`: especificação executável do primeiro funil de R$ 9,90.
-- `docs/CRIATIVOS-PILOTO.md`: primeiros anúncios, roteiros, carrosséis e CTAs.
-- `docs/IMPLEMENTACAO.md`: páginas, tecnologia, eventos e ordem de construção.
-
-## Princípios
-
-1. Persuasão forte sem promessa falsa.
-2. Nenhuma instrução de invasão, perseguição ou rastreamento clandestino.
-3. O teste não confirma nem descarta infidelidade.
-4. O resultado pago precisa entregar valor real e imediato.
-5. A experiência deve ser rápida, confidencial, mobile-first e simples.
-6. O funil inicial existe para validar demanda antes de criar um produto grande.
+A conselheira roda no Magnetus3 (`/api/lucida/dor`). Para apontar o app para outro endereço, use `VITE_LUCIDA_URL`.
 
 ## Status
 
-- [x] Estratégia central definida
-- [x] Persona e dor principal mapeadas
-- [x] Arquitetura do MVP definida
-- [x] Resultado pago definido em R$ 9,90
-- [ ] Landing page implementada
-- [ ] Quiz implementado
-- [ ] Checkout integrado
-- [ ] Resultados dinâmicos implementados
-- [ ] Criativos produzidos
-- [ ] Pixel e métricas configurados
-- [ ] Campanha piloto publicada
+- [x] Auditoria (Fase 0)
+- [x] Fundação: arquitetura, contratos e instruções da conselheira
+- [x] Jornada: momento, avaliação, plano e oito módulos
+- [x] LÚCIDA conselheira integrada, com segurança, limites e tratamento de erros
+- [x] SOS, rascunhos e progresso
+- [x] Testes unitários, do servidor e de ponta a ponta
+- [ ] Homologação em celulares e revisão editorial (Sol)
+- [ ] Decisões comerciais: nome, modelo de acesso e domínio

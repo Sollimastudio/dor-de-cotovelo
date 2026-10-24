@@ -1,0 +1,54 @@
+// Percurso de ponta a ponta no celular (390x844), contra `npm run preview -- --port 5300`.
+// Uso: node scripts/e2e.mjs <pasta-das-capturas> [url-base]
+// Requer Playwright disponível: PLAYWRIGHT=<caminho do módulo> e CHROMIUM=<executável>, se não estiverem no padrão.
+// Rodando local, a LÚCIDA recusa a origem localhost: o teste confere que o erro é mostrado sem fingir resposta.
+const { chromium } = await import(process.env.PLAYWRIGHT || 'playwright');
+const D=process.argv[2] || 'capturas', B=process.argv[3] || 'http://localhost:5300';
+await import('node:fs').then(fs=>fs.mkdirSync(D,{recursive:true}));
+const br=await chromium.launch(process.env.CHROMIUM ? {executablePath:process.env.CHROMIUM} : {});
+const p=await (await br.newContext({viewport:{width:390,height:844},deviceScaleFactor:2})).newPage();
+const erros=[]; p.on('pageerror',e=>erros.push(e.message));
+const shot=async n=>{await p.waitForTimeout(250);await p.screenshot({path:`${D}/${n}.png`});};
+const ok=(c,m)=>{if(!c)throw new Error('FALHOU: '+m);console.log('ok',m)};
+await p.goto(B+'/',{waitUntil:'networkidle'}); await shot('01-inicio');
+await p.getByRole('link',{name:'Começar pelo meu momento'}).click();
+await p.getByRole('button',{name:'A pessoa não me corresponde.'}).click();
+await p.getByRole('button',{name:'Não consigo parar de pensar nela.'}).click(); await shot('02-momento');
+await p.getByRole('button',{name:'Continuar'}).click();
+await p.getByRole('button',{name:'De um a seis meses'}).click();
+await p.getByRole('button',{name:'Segurar a vontade de mandar mensagem ou procurar'}).click();
+await p.getByRole('button',{name:'Bastante'}).click();
+await p.getByRole('button',{name:'Olhar as redes da pessoa'}).click(); await shot('03-avaliacao');
+await p.getByRole('button',{name:'Continuar'}).click();
+await p.getByRole('button',{name:'Pular'}).click();
+await p.getByLabel('Seu objetivo').fill('Parar de olhar as redes dele e voltar a dormir.');
+await p.getByRole('button',{name:'Ver meu ponto de partida'}).click(); await shot('04-plano');
+ok(await p.getByRole('heading',{name:'Comece pelo SOS Emocional'}).isVisible(),'plano recomenda SOS para impulso');
+await p.goto(B+'/jornada/m2'); await p.getByLabel('O que aconteceu de forma observável?').fill('Ele visualizou e não respondeu desde ontem.');
+await p.getByLabel('O que você está interpretando?').fill('Que ele não liga para mim.'); await shot('05-modulo');
+await p.getByRole('button',{name:'Concluir este módulo'}).click();
+ok(await p.getByText('Módulo concluído').isVisible(),'módulo 2 concluído');
+await p.reload(); ok((await p.getByLabel('O que aconteceu de forma observável?').inputValue()).includes('visualizou'),'respostas persistem após recarregar');
+await p.getByRole('link',{name:'Abrir o SOS Emocional'}).click();
+await p.getByRole('button',{name:'Não, mas estou mal e no impulso'}).click();
+await p.getByRole('button',{name:'Estou com vontade de mandar mensagem'}).click(); await p.getByRole('button',{name:'Continuar'}).click();
+await p.getByRole('radiogroup',{name:'Urgência antes da pausa'}).getByRole('radio',{name:'8'}).click(); await shot('06-sos-acolher');
+await p.getByRole('button',{name:'Continuar'}).click(); await p.getByRole('button',{name:'1 min'}).click(); await p.waitForTimeout(1500); await shot('07-sos-respiracao');
+await p.getByRole('button',{name:'Encerrar a pausa'}).click();
+await p.getByRole('radiogroup',{name:'Urgência depois da pausa'}).getByRole('radio',{name:'4'}).click();
+ok(await p.getByText('A urgência baixou de 8 para 4').isVisible(),'termômetro mostra a queda');
+await p.getByRole('button',{name:'Continuar'}).click(); await p.getByRole('button',{name:'Escolher o próximo passo'}).click(); await shot('08-sos-escolher');
+await p.getByRole('button',{name:'Escrever a mensagem sem enviar'}).click(); await p.getByRole('link',{name:'Escrever a mensagem que não envio'}).click();
+await p.getByLabel('Sua mensagem que não será enviada').fill('Por que você sumiu?'); await p.getByRole('button',{name:'Guardar sem enviar'}).click(); await shot('09-rascunho');
+await p.goto(B+'/sos'); await p.getByRole('button',{name:'Sim, preciso de ajuda agora'}).click(); await shot('10-sos-seguranca');
+ok(await p.locator('a[href="tel:188"]').isVisible() && await p.locator('a[href="tel:180"]').isVisible(),'tela de segurança com 188 e 180');
+await p.goto(B+'/lucida'); await shot('11-lucida-consentimento'); await p.getByRole('button',{name:'Concordo e quero conversar'}).click();
+await p.getByLabel('Sua mensagem para a LÚCIDA').fill('Ele visualizou e não respondeu.'); await p.getByRole('button',{name:'Enviar'}).click(); await p.waitForTimeout(2500); await shot('12-lucida');
+ok(await p.getByRole('alert').isVisible(),'erro de conexão tratado sem fingir resposta (origem local não autorizada)');
+ok((await p.getByLabel('Sua mensagem para a LÚCIDA').inputValue()).includes('visualizou'),'mensagem volta para a caixa após erro');
+await p.goto(B+'/progresso'); await p.getByRole('radiogroup',{name:'Consigo identificar o que estou sentindo'}).getByRole('radio',{name:'3'}).click(); await p.getByRole('button',{name:'Registrar como estou hoje'}).click(); await shot('13-progresso');
+ok(await p.getByText('1/8').isVisible(),'progresso conta 1 módulo');
+await p.goto(B+'/privacidade'); await p.getByRole('button',{name:'Apagar tudo'}).click(); await p.getByRole('button',{name:'Confirmar: apagar tudo deste aparelho'}).click();
+ok(await p.evaluate(()=>localStorage.getItem('dor-de-cotovelo:v1'))===null || JSON.parse(await p.evaluate(()=>localStorage.getItem('dor-de-cotovelo:v1'))).sos.length===0,'apagar tudo limpa o aparelho');
+console.log('erros JS:', erros.length?erros:'nenhum');
+await br.close();
